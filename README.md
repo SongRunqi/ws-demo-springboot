@@ -27,3 +27,12 @@ registry.setApplicationDestinationPrefixes("/ei");
   handles messages sent to destinations starting with /groupChat
 - setApplicationDestinationPrefixes("/ei") - Sets the prefix for messages sent from 
   client to server (app-bound messages)
+
+
+# Steps
+1. create a websocketConfig class which both enabled @EnableWebSocketMessageBroker and implements WebSocketMessageBrokerConfigurer
+2. Override registerStompEndpoints method to set an endpoint for ws connecting
+3. Override configureMessageBroker to create a message broker to broadcast messages using a specified prefix /groupChat, and also set the prefix for client send request with /ei.
+4. Create MessageMapping for client request : broadcast.join, broadcast.chat, and with SendTo annotation send this message to the channel /group/all
+5. client should connect to ws endpoint with the url: `/ei-ws` (default with current domain), subscribe to `/group/all`, when it connected, send a connected message '/ei/broadcast.join', 
+6. client sends message with '/ei/broadcast.chat'
